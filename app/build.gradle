@@ -42,6 +42,8 @@ dependencies {
     implementation 'com.orhanobut:logger:2.2.0'
     implementation "androidx.core:core-ktx:1.5.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //PermissionX
+    implementation'com.permissionx.guolindev:permissionx:1.4.0'
 }
 repositories {
     mavenCentral()

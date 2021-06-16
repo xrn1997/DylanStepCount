@@ -1,12 +1,17 @@
 package cn.bluemobi.dylan.step.activity
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
+import com.permissionx.guolindev.PermissionX
 import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import cn.bluemobi.dylan.step.R
 import cn.bluemobi.dylan.step.step.UpdateUiCallBack
@@ -30,14 +35,60 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         tvIsSupport = findViewById(R.id.tv_isSupport)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         assignViews()
         initData()
         addListener()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            permissionX()
+        }
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun permissionX() {
+        PermissionX
+            .init(this)
+            .permissions(allNeedPermissions())
+            .onExplainRequestReason { scope, deniedList ->
+                scope.showRequestReasonDialog(
+                    deniedList,
+                    "即将重新申请的权限是程序必须依赖的权限(请选择始终)",
+                    "我已明白",
+                    "取消"
+                )
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(
+                    deniedList,
+                    "您需要去应用程序设置当中手动开启权限",
+                    "我已明白",
+                    "取消"
+                )
+            }
+            .request { allGranted, _, _ ->
+                if (allGranted) {
+                    Toast.makeText(this, "所有申请的权限都已通过", Toast.LENGTH_SHORT).show()
+                } else {
+                    finish()
+                }
+            }
+    }
+
+    /**
+     * 所有需要的权限
+     */
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun allNeedPermissions(): List<String> {
+        val permissions: MutableList<String> = ArrayList()
+        permissions.apply {
+            add(Manifest.permission.ACTIVITY_RECOGNITION)
+        }
+        return permissions
+    }
     private fun addListener() {
         tvSet!!.setOnClickListener(this)
         tvData!!.setOnClickListener(this)

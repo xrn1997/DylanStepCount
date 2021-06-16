@@ -4,12 +4,13 @@
 
     <!--计歩-->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+<!--    <uses-permission android:name="android.permission.WRITE_SETTINGS" />-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-feature android:name="android.hardware.sensor.accelerometer" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+<!--    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />-->
 
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
@@ -19,13 +20,15 @@
         android:required="true" />
 
     <application
-        android:name=".app.MyApplication"
+        android:name="cn.bluemobi.dylan.step.app.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity" android:launchMode="singleTask">
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,10 +41,10 @@
         <activity
             android:name=".activity.HistoryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <service
             android:name=".step.service.StepService"
-            android:priority="1000">
+            android:priority="1000"
+            android:exported="false">
             <intent-filter>
                 <!-- 系统启动完成后会调用-->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -56,7 +59,8 @@
         <service
             android:name=".pedometer.StepsDetectService"
             android:priority="1000"
-            android:process="cn.bluemobi.dylan.step..pedometer.StepsDetectService">
+            android:process="cn.bluemobi.dylan.step..pedometer.StepsDetectService"
+            android:exported="false">
             <intent-filter>
                 <!-- 系统启动完成后会调用-->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

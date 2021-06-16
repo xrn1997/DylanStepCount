@@ -25,14 +25,14 @@
             android:visibility="visible" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="#00000000"
             android:gravity="center_horizontal"
-            android:paddingLeft="10px"
-            android:paddingRight="10px"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
             android:text="历史记录"
             android:textColor="#ffffff"
             android:textSize="18sp" />
@@ -42,15 +42,14 @@
             android:id="@+id/iv_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
             android:layout_gravity="center"
             android:ellipsize="end"
             android:gravity="center"
             android:maxEms="4"
-            android:maxWidth="80px"
+            android:maxWidth="53dp"
             android:minEms="2"
-            android:paddingLeft="40px"
-            android:paddingRight="40px"
+            android:paddingLeft="26dp"
+            android:paddingRight="26dp"
             android:singleLine="true"
             android:visibility="invisible" />
 

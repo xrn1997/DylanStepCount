@@ -1,4 +1,4 @@
-package cn.bluemobi.dylan.step.step.utils
+package cn.bluemobi.dylan.step.step.util
 
 import android.content.Context
 
@@ -9,7 +9,7 @@ import android.content.Context
  * @author dylan
  */
 @Suppress("unused")
-class SharedPreferencesUtils {
+class SharedPreferencesUtil {
     private var context: Context? = null
 
     /**

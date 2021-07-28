@@ -1,4 +1,4 @@
-package cn.bluemobi.dylan.step.step.utils
+package cn.bluemobi.dylan.step.step.util
 
 import android.annotation.TargetApi
 import android.content.Context

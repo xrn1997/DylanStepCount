@@ -16,6 +16,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import cn.bluemobi.dylan.step.R
+import cn.bluemobi.dylan.step.activity.HistoryActivity
 import cn.bluemobi.dylan.step.activity.MainActivity
 import cn.bluemobi.dylan.step.manager.ObjectBoxManager
 import cn.bluemobi.dylan.step.step.UpdateUiCallBack
@@ -26,6 +27,7 @@ import cn.bluemobi.dylan.step.step.entity.Step_
 import com.orhanobut.logger.Logger
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class StepService : Service(), SensorEventListener {
 
@@ -119,19 +121,27 @@ class StepService : Service(), SensorEventListener {
         mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel =
-                NotificationChannel("计步器服务", "通知", NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationChannel("计步器服务", "通知", NotificationManager.IMPORTANCE_HIGH)
             mNotificationManager.createNotificationChannel(channel)
         }
+        val fullScreenIntent = Intent(this, HistoryActivity::class.java)
+        val fullScreenPendingIntent = PendingIntent.getActivity(
+            this, 0,
+            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val intent = Intent(this, MainActivity::class.java)
         val pi = PendingIntent.getActivity(this, 0, intent, 0)
         mBuilder = NotificationCompat.Builder(this, "计步器服务")
         val notification = mBuilder!!.setContentTitle(resources.getString(R.string.app_name))
             .setContentText("今日步数$stepCount 步")
-            .setContentIntent(pi)
+           // .setContentIntent(pi)
             .setWhen(System.currentTimeMillis()) //通知产生的时间，会在通知信息里显示
             .setAutoCancel(false) //设置这个标志当用户单击面板就可以让通知将自动取消
             .setOngoing(true) //ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
             .setSmallIcon(R.mipmap.logo)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setFullScreenIntent(fullScreenPendingIntent, true)
             .build()
         startForeground(notifyIdStep, notification)
     }

@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import cn.bluemobi.dylan.step.R
-import cn.bluemobi.dylan.step.step.utils.SharedPreferencesUtils
+import cn.bluemobi.dylan.step.step.util.SharedPreferencesUtil
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -17,7 +17,7 @@ import java.util.*
  * @date 2016/10/18.
  */
 class SetPlanActivity : AppCompatActivity(), View.OnClickListener {
-    private var sp: SharedPreferencesUtils? = null
+    private var sp: SharedPreferencesUtil? = null
     private var layoutTitleBar: LinearLayout? = null
     private var ivLeft: ImageView? = null
     private var ivRight: ImageView? = null
@@ -47,7 +47,7 @@ class SetPlanActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initData() { //获取锻炼计划
-        sp = SharedPreferencesUtils(this)
+        sp = SharedPreferencesUtil(this)
         val planWalkQTY = sp!!.getParam("planWalk_QTY", "7000") as String?
         val remind = sp!!.getParam("remind", "1") as String?
         val achieveTime = sp!!.getParam("achieveTime", "20:00") as String?

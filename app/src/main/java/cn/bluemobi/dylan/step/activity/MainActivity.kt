@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import cn.bluemobi.dylan.step.R
 import cn.bluemobi.dylan.step.step.UpdateUiCallBack
 import cn.bluemobi.dylan.step.step.service.StepService
-import cn.bluemobi.dylan.step.step.utils.SharedPreferencesUtils
+import cn.bluemobi.dylan.step.step.util.SharedPreferencesUtil
 import cn.bluemobi.dylan.step.view.StepArcView
 
 /**
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var cc: StepArcView? = null
     private var tvSet: TextView? = null
     private var tvIsSupport: TextView? = null
-    private var sp: SharedPreferencesUtils? = null
+    private var sp: SharedPreferencesUtil? = null
     private fun assignViews() {
         tvData = findViewById(R.id.tv_data)
         cc = findViewById(R.id.cc)
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initData() {
-        sp = SharedPreferencesUtils(this)
+        sp = SharedPreferencesUtil(this)
         //获取用户设置的计划锻炼步数，没有设置过的话默认7000
         val planWalkQTY = sp!!.getParam("planWalk_QTY", "7000") as String?
         //设置当前步数为0

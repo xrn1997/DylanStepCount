@@ -99,7 +99,8 @@
                     android:gravity="center_vertical|end"
                     android:text="@string/seven_thousand"
                     android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:autofillHints="" />
             </LinearLayout>
 
             <ImageView

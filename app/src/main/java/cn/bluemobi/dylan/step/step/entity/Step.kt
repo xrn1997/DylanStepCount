@@ -13,7 +13,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity
 class Step(
-    @Id var id: Long= 0,
+    @Id var id: Long = 0,
     var date: String? = null,
     var step: String? = null
 ) : Parcelable

@@ -5,7 +5,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Build
-import com.permissionx.guolindev.PermissionX
 import android.os.Bundle
 import android.os.IBinder
 import android.view.View
@@ -18,6 +17,7 @@ import cn.bluemobi.dylan.step.step.UpdateUiCallBack
 import cn.bluemobi.dylan.step.step.service.StepService
 import cn.bluemobi.dylan.step.step.util.SharedPreferencesUtil
 import cn.bluemobi.dylan.step.view.StepArcView
+import com.permissionx.guolindev.PermissionX
 
 /**
  * 记步主页
@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         return permissions
     }
+
     private fun addListener() {
         tvSet!!.setOnClickListener(this)
         tvData!!.setOnClickListener(this)
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun setupService() {
         val intent = Intent(this, StepService::class.java)
         isBind = bindService(intent, conn, BIND_AUTO_CREATE)
-            startService(intent);
+        startService(intent)
     }
 
     /**

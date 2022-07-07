@@ -127,7 +127,7 @@ class SetPlanActivity : AppCompatActivity(), View.OnClickListener {
 //        }
         TimePickerDialog(this, { _, calendarHourOfDay, calendarMinute ->
             calendar[Calendar.HOUR_OF_DAY] = calendarHourOfDay
-            calendar[Calendar.MINUTE] =  calendarMinute
+            calendar[Calendar.MINUTE] = calendarMinute
             val reMainTime =
                 calendar[Calendar.HOUR_OF_DAY].toString() + ":" + calendar[Calendar.MINUTE]
             var date: Date? = null

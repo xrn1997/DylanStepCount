@@ -42,7 +42,7 @@ open class HistoryActivity : AppCompatActivity() {
         Logger.d("stepData's=$stepData")
     }
 
-    private fun setEmptyView(listView: ListView?): TextView{
+    private fun setEmptyView(listView: ListView?): TextView {
         val emptyView = TextView(this)
         emptyView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,

@@ -9,11 +9,11 @@ import io.objectbox.BoxStore
  * @date 2021/6/14
  */
 object ObjectBoxManager {
-    lateinit var  store:BoxStore
+    lateinit var store: BoxStore
         private set
 
-    fun init(context: Context){
-        store= MyObjectBox.builder()
+    fun init(context: Context) {
+        store = MyObjectBox.builder()
             .androidContext(context.applicationContext)
             .build()
     }

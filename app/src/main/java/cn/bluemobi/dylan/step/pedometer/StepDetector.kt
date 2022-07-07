@@ -46,42 +46,40 @@ class StepDetector : SensorEventListener {
     override fun onSensorChanged(event: SensorEvent) {
         val sensor = event.sensor
         synchronized(this) {
-            if (sensor.type != Sensor.TYPE_ORIENTATION) {
-                val j = if (sensor.type == Sensor.TYPE_ACCELEROMETER) 1 else 0
-                if (j == 1) {
-                    var vSum = 0f
-                    for (i in 0..2) {
-                        val v = mYOffset + event.values[i] * mScale[j]
-                        vSum += v
-                    }
-                    val k = 0
-                    val v = vSum / 3
-                    val direction =
-                        (if (v > mLastValues[k]) 1 else if (v < mLastValues[k]) -1 else 0).toFloat()
-                    if (direction == -mLastDirections[k]) {
-                        val extType = if (direction > 0) 0 else 1
-                        mLastExtremes[extType][k] = mLastValues[k]
-                        val diff =
-                            abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k])
-                        if (diff > mLimit) {
-                            val isAlmostAsLargeAsPrevious = diff > mLastDiff[k] * 2 / 3
-                            val isPreviousLargeEnough = mLastDiff[k] > diff / 3
-                            val isNotContra = mLastMatch != 1 - extType
-                            mLastMatch =
-                                if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
-                                    if (mListener != null) {
-                                        mListener!!.onStep()
-                                    }
-                                    extType
-                                } else {
-                                    -1
-                                }
-                        }
-                        mLastDiff[k] = diff
-                    }
-                    mLastDirections[k] = direction
-                    mLastValues[k] = v
+            val j = if (sensor.type == Sensor.TYPE_ACCELEROMETER) 1 else 0
+            if (j == 1) {
+                var vSum = 0f
+                for (i in 0..2) {
+                    val v = mYOffset + event.values[i] * mScale[j]
+                    vSum += v
                 }
+                val k = 0
+                val v = vSum / 3
+                val direction =
+                    (if (v > mLastValues[k]) 1 else if (v < mLastValues[k]) -1 else 0).toFloat()
+                if (direction == -mLastDirections[k]) {
+                    val extType = if (direction > 0) 0 else 1
+                    mLastExtremes[extType][k] = mLastValues[k]
+                    val diff =
+                        abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k])
+                    if (diff > mLimit) {
+                        val isAlmostAsLargeAsPrevious = diff > mLastDiff[k] * 2 / 3
+                        val isPreviousLargeEnough = mLastDiff[k] > diff / 3
+                        val isNotContra = mLastMatch != 1 - extType
+                        mLastMatch =
+                            if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
+                                if (mListener != null) {
+                                    mListener!!.onStep()
+                                }
+                                extType
+                            } else {
+                                -1
+                            }
+                    }
+                    mLastDiff[k] = diff
+                }
+                mLastDirections[k] = direction
+                mLastValues[k] = v
             }
         }
     }

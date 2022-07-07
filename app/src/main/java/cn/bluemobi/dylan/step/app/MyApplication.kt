@@ -10,14 +10,15 @@ import cn.bluemobi.dylan.step.manager.ObjectBoxManager
  * @date 2016/10/18.
  */
 class MyApplication : Application() {
-    companion object{
+    companion object {
         @SuppressLint("StaticFieldLeak")
         @JvmStatic
         lateinit var context: Context
     }
+
     override fun onCreate() {
         super.onCreate()
-        context =applicationContext
+        context = applicationContext
         ObjectBoxManager.init(context)
     }
 }

@@ -13,7 +13,7 @@ class StepsDetectService : Service() {
     override fun onCreate() {
         mStepDetector = StepDetector()
         registerDetector()
-        mStepDetector!!.setStepListener(object :StepListener{
+        mStepDetector!!.setStepListener(object : StepListener {
             override fun onStep() {
                 steps++
                 if (mOnStepDetectListener != null) {

@@ -1,5 +1,6 @@
 package cn.bluemobi.dylan.step.step.service
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -117,6 +118,7 @@ class StepService : Service(), SensorEventListener {
     /**
      * 初始化通知栏
      */
+    @SuppressLint("UnspecifiedImmutableFlag")
     private fun initNotification() {
         mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -125,16 +127,17 @@ class StepService : Service(), SensorEventListener {
             mNotificationManager.createNotificationChannel(channel)
         }
         val fullScreenIntent = Intent(this, HistoryActivity::class.java)
-        val fullScreenPendingIntent = PendingIntent.getActivity(
-            this, 0,
-            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val intent = Intent(this, MainActivity::class.java)
-        val pi = PendingIntent.getActivity(this, 0, intent, 0)
+        val fullScreenPendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_IMMUTABLE)
+        } else {
+            PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+//        val intent = Intent(this, MainActivity::class.java)
+//        val pi = PendingIntent.getActivity(this, 0, intent, 0)
         mBuilder = NotificationCompat.Builder(this, "计步器服务")
         val notification = mBuilder!!.setContentTitle(resources.getString(R.string.app_name))
             .setContentText("今日步数$stepCount 步")
-           // .setContentIntent(pi)
+            // .setContentIntent(pi)
             .setWhen(System.currentTimeMillis()) //通知产生的时间，会在通知信息里显示
             .setAutoCancel(false) //设置这个标志当用户单击面板就可以让通知将自动取消
             .setOngoing(true) //ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
@@ -157,13 +160,17 @@ class StepService : Service(), SensorEventListener {
             .equal(Step_.date, CURRENT_DATE)
             .build()
             .find()
-        if (list.size == 0 || list.isEmpty()) {
-            stepCount = 0
-        } else if (list.size == 1) {
-            Log.v(TAG, "Step=" + list[0].toString())
-            stepCount = list[0].step!!.toInt()
-        } else {
-            Log.v(TAG, "出错了！")
+        when (list.size) {
+            0 -> {
+                stepCount = 0
+            }
+            1 -> {
+                Log.v(TAG, "Step=" + list[0].toString())
+                stepCount = list[0].step!!.toInt()
+            }
+            else -> {
+                Log.v(TAG, "出错了！")
+            }
         }
         if (mStepCount != null) {
             mStepCount!!.setSteps(stepCount)
@@ -260,16 +267,16 @@ class StepService : Service(), SensorEventListener {
      */
     private val isCall: Unit
         get() {
-            val time = getSharedPreferences("share_date", MODE_MULTI_PROCESS).getString(
+            val time = getSharedPreferences("share_date", Context.MODE_PRIVATE).getString(
                 "achieveTime",
                 "21:00"
             )
-            val plan = getSharedPreferences("share_date", MODE_MULTI_PROCESS).getString(
+            val plan = getSharedPreferences("share_date", Context.MODE_PRIVATE).getString(
                 "planWalk_QTY",
                 "7000"
             )
             val remind =
-                getSharedPreferences("share_date", MODE_MULTI_PROCESS).getString("remind", "1")
+                getSharedPreferences("share_date", Context.MODE_PRIVATE).getString("remind", "1")
             Logger.d(
                 """
     time=$time
@@ -300,11 +307,15 @@ class StepService : Service(), SensorEventListener {
     /**
      * 更新步数通知
      */
+    @SuppressLint("UnspecifiedImmutableFlag")
     private fun updateNotification() {
         //设置点击跳转
         val hangIntent = Intent(this, MainActivity::class.java)
-        val hangPendingIntent =
-            PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val hangPendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_IMMUTABLE)
+        } else {
+            PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
         val notification = mBuilder!!
             .setContentTitle(resources.getString(R.string.app_name))
             .setContentText("今日步数$stepCount 步")
@@ -345,13 +356,20 @@ class StepService : Service(), SensorEventListener {
     /**
      * 提醒锻炼通知栏
      */
+    @SuppressLint("UnspecifiedImmutableFlag")
     private fun remindNotify() {
         //设置点击跳转
         val hangIntent = Intent(this, MainActivity::class.java)
-        val hangPendingIntent =
-            PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val hangPendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_IMMUTABLE)
+        } else {
+            PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
         val plan =
-            getSharedPreferences("share_date", MODE_MULTI_PROCESS).getString("planWalk_QTY", "7000")
+            getSharedPreferences("share_date", Context.MODE_PRIVATE).getString(
+                "planWalk_QTY",
+                "7000"
+            )
         mBuilder!!.setContentTitle("今日步数$stepCount 步")
             .setContentText("距离目标还差" + (Integer.valueOf(plan!!) - stepCount) + "步，加油！")
             .setContentIntent(hangPendingIntent)
@@ -533,7 +551,7 @@ class StepService : Service(), SensorEventListener {
             .equal(Step_.date, CURRENT_DATE)
             .build()
             .find()
-        if (list.size == 0 || list.isEmpty()) {
+        if (list.size == 0) {
             val data = Step()
             data.date = CURRENT_DATE
             data.step = tempStep.toString() + ""

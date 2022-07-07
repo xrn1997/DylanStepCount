@@ -61,6 +61,7 @@ class StepArcView : View {
         super.onDraw(canvas)
         /**中心点的x坐标 */
         val centerX = ((width) / 2).toFloat()
+
         /**指定圆弧的外轮廓矩形区域 */
         val rectF = RectF(
             0 + borderWidth,
@@ -203,10 +204,13 @@ class StepArcView : View {
         }
         /**上次所走步数占用总共步数的百分比 */
         val scalePrevious = Integer.valueOf(stepNumber).toFloat() / totalStepNum
+
         /**换算成弧度最后要到达的角度的长度-->弧长 */
         val previousAngleLength = scalePrevious * angleLength
+
         /**所走步数占用总共步数的百分比 */
         val scale = currentCounts.toFloat() / totalStepNum
+
         /**换算成弧度最后要到达的角度的长度-->弧长 */
         val currentAngleLength = scale * angleLength
         /**开始执行动画 */

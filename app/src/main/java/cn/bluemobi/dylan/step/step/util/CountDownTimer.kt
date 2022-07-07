@@ -82,7 +82,7 @@ abstract class CountDownTimer(
                     }
                     if (!mCancelled) {
                         sendMessageDelayed(obtainMessage(MSG), delay)
-                    }else{
+                    } else {
                         Log.d("handler", "handler else ")
                     }
                 }

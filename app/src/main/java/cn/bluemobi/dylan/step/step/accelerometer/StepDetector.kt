@@ -182,7 +182,7 @@ class StepDetector : SensorEventListener {
         }
         ave /= valueNum
         ave =
-            if (ave >= 8) 4.3.toFloat() else if (ave >= 7 && ave < 8) 3.3.toFloat() else if (ave >= 4 && ave < 7) 2.3.toFloat() else if (ave >= 3 && ave < 4) 2.0.toFloat() else {
+            if (ave >= 8) 4.3.toFloat() else if (ave >= 7) 3.3.toFloat() else if (ave >= 4) 2.3.toFloat() else if (ave >= 3) 2.0.toFloat() else {
                 1.3.toFloat()
             }
         return ave
